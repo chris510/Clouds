@@ -1,16 +1,28 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { UiService } from '../services/ui.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-nav',
   templateUrl: './nav.component.html',
   styleUrls: ['./nav.component.scss']
 })
-export class NavComponent implements OnInit {
+export class NavComponent implements OnInit, OnDestroy {
   showMenu = false;
   darkModeActive = false;
-  constructor() { }
+  themeSub: Subscription;
+
+  constructor(
+    private uiService: UiService
+  ) { }
 
   ngOnInit(): void {
+    this.themeSub = this.uiService.darkModeState.subscribe(
+      (val) => {
+        this.darkModeActive = val;
+        console.log(val,);
+      }
+    )
   }
 
   onToggleMenu() {
@@ -18,7 +30,11 @@ export class NavComponent implements OnInit {
   }
 
   onToggleTheme() {
-    this.darkModeActive = !this.darkModeActive;
+    this.uiService.darkModeState.next(!this.darkModeActive);
+    this.uiService.isDarkTheme() ? this.uiService.setLightTheme() : this.uiService.setDarkTheme();
   }
 
+  ngOnDestroy() {
+    this.themeSub.unsubscribe();
+  }
 }
