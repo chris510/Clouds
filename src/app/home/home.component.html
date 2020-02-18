@@ -1,0 +1,23 @@
+<div class="city-search-container">
+  <h3 class="city-search-text">Search Cities</h3>
+  <input
+    class="city-search-input"
+    type="text"
+    [(ngModel)]="cityName"
+    placeholder="Search City"
+  >
+  <button type="submit" (click)="onSubmit()">Submit</button>
+  <p> {{ cityName }}</p>
+  <div *ngIf="foundWeather">
+    <app-city-weather
+      *ngFor="let city of cities; let i = index"
+      [city]="city"
+    >
+    </app-city-weather>
+  </div>
+  <div>
+
+  </div>
+</div>
+
+<div></div>
